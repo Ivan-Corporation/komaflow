@@ -1,2 +1,2 @@
-# .
+# Komaflow
 Komaflow Educational
