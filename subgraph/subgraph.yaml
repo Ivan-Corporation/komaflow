@@ -1,0 +1,43 @@
+specVersion: 0.0.5
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum
+    name: Koma
+    # network: arbitrum-one
+    network: arbitrum-sepolia
+    source:
+      address: "0xD5EA29d17A8ad6359b64Dee8994AF9250B4d86B9" # KOMA_PROXY
+      abi: Koma
+      startBlock: 229407940 # IMPORTANT FOR VIDEO DON'T FORGET IDIOT - Replace with actual deployment block
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - Mint
+        - Burn
+        - Transfer
+        - Blacklisted
+        - UnBlacklisted
+        - BlacklisterChanged
+        - Upgrade
+      abis:
+        - name: Koma
+          file: ./abis/Koma.json
+      eventHandlers:
+        - event: Minted(indexed address,uint256)
+          handler: handleMinted
+        - event: Burned(indexed address,uint256)
+          handler: handleBurned
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleTransfer
+        - event: Blacklisted(indexed address)
+          handler: handleBlacklisted
+        - event: UnBlacklisted(indexed address)
+          handler: handleUnBlacklisted
+        - event: BlacklisterChanged(indexed address)
+          handler: handleBlacklisterChanged
+        - event: Upgraded(indexed address)
+          handler: handleUpgraded
+      file: ./src/mapping.ts

@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.28;
 
-import {OwnableUpgradeable} from "@openzeppelin-upgradeable/contracts/access/OwnableUpgradeable.sol";
-import {ICommonErrors} from "../interfaces/common/ICommon.sol";
+import {OwnableUpgradeable} from "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
+import {ICommonErrors} from "../interfaces/ICommon.sol";
 
 abstract contract BlacklistableUpgradeable is
     OwnableUpgradeable,
@@ -13,7 +13,7 @@ abstract contract BlacklistableUpgradeable is
         mapping(address user => bool isBlackListed) _blacklisted;
     }
 
-    /// @dev keccak256(abi.encode(uint256(keccak256("syntetika.blacklistable")) - 1)) & ~bytes32(uint256(0xff))
+    /// @dev keccak256(abi.encode(uint256(keccak256("koma.blacklistable")) - 1)) & ~bytes32(uint256(0xff))
     bytes32 private constant BLACKLISTABLE_STORAGE_LOCATION =
         0x7aa1e185c99bdca7bc080880a0300f6f17167ca3d4d6cb177d4c10ba2c8c5900;
 

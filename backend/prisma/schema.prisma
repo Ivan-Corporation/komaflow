@@ -1,0 +1,114 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model MintEvent {
+  id             BigInt   @id @default(autoincrement())
+  txHash         String
+  logIndex       Int
+  blockNumber    Int
+  blockTimestamp DateTime
+  toAddress      Bytes
+  amount         BigInt
+  minter         Bytes
+  createdAt      DateTime @default(now())
+
+  @@unique([txHash, logIndex])
+  @@index([blockTimestamp])
+  @@index([toAddress])
+}
+
+model BurnEvent {
+  id             BigInt   @id @default(autoincrement())
+  txHash         String
+  logIndex       Int
+  blockNumber    Int
+  blockTimestamp DateTime
+  fromAddress    Bytes
+  amount         BigInt
+  burner         Bytes
+  createdAt      DateTime @default(now())
+
+  @@unique([txHash, logIndex])
+  @@index([blockTimestamp])
+  @@index([fromAddress])
+}
+
+model TransferEvent {
+  id             BigInt   @id @default(autoincrement())
+  txHash         String
+  logIndex       Int
+  blockNumber    Int
+  blockTimestamp DateTime
+  fromAddress    Bytes
+  toAddress      Bytes
+  amount         BigInt
+  createdAt      DateTime @default(now())
+
+  @@unique([txHash, logIndex])
+  @@index([blockTimestamp])
+  @@index([fromAddress])
+  @@index([toAddress])
+}
+
+model BlacklistedEvent {
+  id             BigInt   @id @default(autoincrement())
+  txHash         String
+  logIndex       Int
+  blockNumber    Int
+  blockTimestamp DateTime
+  account        Bytes
+  blacklister    Bytes
+  createdAt      DateTime @default(now())
+
+  @@unique([txHash, logIndex])
+  @@index([blockTimestamp])
+  @@index([account])
+}
+
+model UnBlacklistedEvent {
+  id             BigInt   @id @default(autoincrement())
+  txHash         String
+  logIndex       Int
+  blockNumber    Int
+  blockTimestamp DateTime
+  account        Bytes
+  blacklister    Bytes
+  createdAt      DateTime @default(now())
+
+  @@unique([txHash, logIndex])
+  @@index([blockTimestamp])
+  @@index([account])
+}
+
+model TokenSnapshot {
+  snapshotTime        DateTime @id
+  totalSupply         BigInt
+  totalMinted         BigInt
+  totalBurned         BigInt
+  uniqueHolders       Int
+  totalTransactions   Int
+  latestBlockNumber   BigInt
+  createdAt           DateTime @default(now())
+
+  @@index([snapshotTime])
+}
+
+model SystemAlert {
+  id          BigInt   @id @default(autoincrement())
+  severity    String   // INFO, WARNING, ERROR
+  title       String
+  description String
+  source      String   // INDEXER, API, SYSTEM
+  resolved    Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  resolvedAt  DateTime?
+
+  @@index([severity])
+  @@index([createdAt])
+  @@index([resolved])
+}

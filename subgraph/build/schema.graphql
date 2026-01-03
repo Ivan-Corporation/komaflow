@@ -1,0 +1,71 @@
+type Mint @entity(immutable: true) {
+  id: ID!
+  to: Bytes! # address
+  amount: BigInt!
+  timestamp: BigInt!
+  blockNumber: BigInt!
+  transactionHash: Bytes!
+  logIndex: BigInt!
+  minter: Bytes!
+}
+
+type Burn @entity(immutable: true) {
+  id: ID!
+  from: Bytes! # address
+  amount: BigInt!
+  timestamp: BigInt!
+  blockNumber: BigInt!
+  transactionHash: Bytes!
+  logIndex: BigInt!
+  burner: Bytes!
+}
+
+type Transfer @entity(immutable: true) {
+  id: ID!
+  txhash: Bytes!
+  logIndex: BigInt!
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  amount: BigInt!
+  from: Bytes!
+  to: Bytes!
+}
+
+type Blacklisted @entity(immutable: true) {
+  id: ID!
+  account: Bytes!
+  timestamp: BigInt!
+  blockNumber: BigInt!
+  transactionHash: Bytes!
+  logIndex: BigInt!
+  blacklister: Bytes!
+}
+
+type UnBlacklisted @entity(immutable: true) {
+  id: ID!
+  account: Bytes!
+  timestamp: BigInt!
+  blockNumber: BigInt!
+  transactionHash: Bytes!
+  logIndex: BigInt!
+  blacklister: Bytes!
+}
+
+type BlacklisterChanged @entity(immutable: true) {
+  id: ID!
+  newBlacklister: Bytes!
+  timestamp: BigInt!
+  blockNumber: BigInt!
+  transactionHash: Bytes!
+  logIndex: BigInt!
+}
+
+type Upgrade @entity(immutable: true) {
+  id: ID!
+  implementation: Bytes!
+  timestamp: BigInt!
+  blockNumber: BigInt!
+  transactionHash: Bytes!
+  logIndex: BigInt!
+  upgrader: Bytes!
+}

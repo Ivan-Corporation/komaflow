@@ -1,0 +1,12 @@
+{
+  "name": "hbtc",
+  "private": true,
+  "scripts": {
+    "codegen": "graph codegen",
+    "build": "graph build",
+    "deploy": "graph deploy komaflow"
+  },
+  "devDependencies": {
+    "@graphprotocol/graph-ts": "0.35.1"
+  }
+}
