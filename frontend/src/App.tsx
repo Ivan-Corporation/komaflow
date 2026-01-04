@@ -142,9 +142,9 @@ function App() {
                  className="hover:text-blue-400 transition-colors">
                 View on Arbiscan
               </a>
-              <a href="#" className="hover:text-blue-400 transition-colors">Documentation</a>
-              <a href="#" className="hover:text-blue-400 transition-colors">GitHub</a>
-              <a href="#" className="hover:text-blue-400 transition-colors">Support</a>
+              <a href="https://github.com/Ivan-Corporation/komaflow/blob/main/README.md" target='_blank' className="hover:text-blue-400 transition-colors">Documentation</a>
+              <a href="https://github.com/Ivan-Corporation/komaflow" target='_blank' className="hover:text-blue-400 transition-colors">GitHub</a>
+              <a href="https://t.me/KomarIvan" target='_blank' className="hover:text-blue-400 transition-colors">Support</a>
             </div>
           </div>
         </footer>
