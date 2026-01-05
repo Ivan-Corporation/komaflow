@@ -107,14 +107,12 @@ export const getTokenOverview = async (req: Request, res: Response) => {
       },
       recent_activity: {
         large_transfers: recentTransfers
-          .map(
-            (t: any) => ({
-              from: formatAddress(t.fromAddress),
-              to: formatAddress(t.toAddress),
-              amount: formatKomaFromSats(t.amount).toFixed(8),
-              timestamp: t.blockTimestamp.toISOString(),
-            })
-          )
+          .map((t: any) => ({
+            from: formatAddress(t.fromAddress),
+            to: formatAddress(t.toAddress),
+            amount: formatKomaFromSats(t.amount).toFixed(8),
+            timestamp: t.blockTimestamp.toISOString(),
+          }))
           .slice(0, 10),
       },
       as_of: new Date().toISOString(),
@@ -153,16 +151,14 @@ export const getMintHistory = async (req: Request, res: Response) => {
     const total = await prisma.mintEvent.count();
 
     const response = {
-      mints: mints.map(
-        (mint: any) => ({
-          transaction: mint.txHash,
-          block: mint.blockNumber,
-          timestamp: mint.blockTimestamp.toISOString(),
-          to: formatAddress(mint.toAddress),
-          amount: formatKomaFromSats(mint.amount).toFixed(8),
-          minter: formatAddress(mint.minter),
-        })
-      ),
+      mints: mints.map((mint: any) => ({
+        transaction: mint.txHash,
+        block: mint.blockNumber,
+        timestamp: mint.blockTimestamp.toISOString(),
+        to: mint.toAddress.replace(/^\\\\x/, "0x").replace(/^\\x/, "0x"),
+        amount: formatKomaFromSats(mint.amount).toFixed(8),
+        minter: mint.minter.replace(/^\\\\x/, "0x").replace(/^\\x/, "0x"),
+      })),
       pagination: {
         total,
         limit,
@@ -200,16 +196,14 @@ export const getBurnHistory = async (req: Request, res: Response) => {
     const total = await prisma.burnEvent.count();
 
     const response = {
-      burns: burns.map(
-        (burn: any) => ({
-          transaction: burn.txHash,
-          block: burn.blockNumber,
-          timestamp: burn.blockTimestamp.toISOString(),
-          from: formatAddress(burn.fromAddress),
-          amount: formatKomaFromSats(burn.amount).toFixed(8),
-          burner: formatAddress(burn.burner),
-        })
-      ),
+      burns: burns.map((burn: any) => ({
+        transaction: burn.txHash,
+        block: burn.blockNumber,
+        timestamp: burn.blockTimestamp.toISOString(),
+        from: formatAddress(burn.fromAddress),
+        amount: formatKomaFromSats(burn.amount).toFixed(8),
+        burner: formatAddress(burn.burner),
+      })),
       pagination: {
         total,
         limit,
@@ -257,13 +251,11 @@ export const getBlacklistStatus = async (req: Request, res: Response) => {
         (b: { account: { toString: (arg0: string) => unknown } }) =>
           !unblacklistedSet.has(b.account.toString("hex"))
       )
-      .map(
-        (b: any) => ({
-          account: formatAddress(b.account),
-          blacklisted_at: b.blockTimestamp.toISOString(),
-          blacklisted_by: formatAddress(b.blacklister),
-        })
-      );
+      .map((b: any) => ({
+        account: formatAddress(b.account),
+        blacklisted_at: b.blockTimestamp.toISOString(),
+        blacklisted_by: formatAddress(b.blacklister),
+      }));
 
     const response = {
       currently_blacklisted: currentlyBlacklisted,
@@ -304,16 +296,14 @@ export const getTransferHistory = async (req: Request, res: Response) => {
     const total = await prisma.transferEvent.count();
 
     const response = {
-      transfers: transfers.map(
-        (transfer: any) => ({
-          transaction: transfer.txHash,
-          block: transfer.blockNumber,
-          timestamp: transfer.blockTimestamp.toISOString(),
-          from: formatAddress(transfer.fromAddress),
-          to: formatAddress(transfer.toAddress),
-          amount: formatKomaFromSats(transfer.amount).toFixed(8),
-        })
-      ),
+      transfers: transfers.map((transfer: any) => ({
+        transaction: transfer.txHash,
+        block: transfer.blockNumber,
+        timestamp: transfer.blockTimestamp.toISOString(),
+        from: formatAddress(transfer.fromAddress),
+        to: formatAddress(transfer.toAddress),
+        amount: formatKomaFromSats(transfer.amount).toFixed(8),
+      })),
       pagination: {
         total,
         limit,

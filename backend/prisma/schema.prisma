@@ -12,9 +12,9 @@ model MintEvent {
   logIndex       Int
   blockNumber    Int
   blockTimestamp DateTime
-  toAddress      Bytes
+  toAddress      String
   amount         BigInt
-  minter         Bytes
+  minter         String
   createdAt      DateTime @default(now())
 
   @@unique([txHash, logIndex])
@@ -28,9 +28,9 @@ model BurnEvent {
   logIndex       Int
   blockNumber    Int
   blockTimestamp DateTime
-  fromAddress    Bytes
+  fromAddress    String
   amount         BigInt
-  burner         Bytes
+  burner         String
   createdAt      DateTime @default(now())
 
   @@unique([txHash, logIndex])
@@ -44,8 +44,8 @@ model TransferEvent {
   logIndex       Int
   blockNumber    Int
   blockTimestamp DateTime
-  fromAddress    Bytes
-  toAddress      Bytes
+  fromAddress    String
+  toAddress      String
   amount         BigInt
   createdAt      DateTime @default(now())
 
@@ -61,8 +61,8 @@ model BlacklistedEvent {
   logIndex       Int
   blockNumber    Int
   blockTimestamp DateTime
-  account        Bytes
-  blacklister    Bytes
+  account        String
+  blacklister    String
   createdAt      DateTime @default(now())
 
   @@unique([txHash, logIndex])
@@ -76,8 +76,8 @@ model UnBlacklistedEvent {
   logIndex       Int
   blockNumber    Int
   blockTimestamp DateTime
-  account        Bytes
-  blacklister    Bytes
+  account        String
+  blacklister    String
   createdAt      DateTime @default(now())
 
   @@unique([txHash, logIndex])

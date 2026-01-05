@@ -1,29 +1,25 @@
-# Frontend implementation for admin, minter and dashboard panel of tokens REACT VITE TAILWIND
-  "dependencies": {
-    "@hookform/resolvers": "^5.2.2",
-    "@reown/appkit": "^1.8.15",
-    "@reown/appkit-adapter-ethers": "^1.8.15",
-    "@tailwindcss/vite": "^4.1.18",
-    "@tanstack/react-query": "^5.90.16",
-    "axios": "^1.13.2",
-    "ethers": "^6.16.0",
-    "lucide-react": "^0.562.0",
-    "react": "^19.2.0",
-    "react-dom": "^19.2.0",
-    "react-hook-form": "^7.69.0",
-    "recharts": "^3.6.0",
-    "tailwindcss": "^4.1.18"
-  },
-  "devDependencies": {
-    "@eslint/js": "^9.39.1",
-    "@types/node": "^24.10.1",
-    "@types/react": "^19.2.5",
-    "@types/react-dom": "^19.2.3",
-    "@vitejs/plugin-react": "^5.1.1",
-    "eslint": "^9.39.1",
-    "eslint-plugin-react-hooks": "^7.0.1",
-    "eslint-plugin-react-refresh": "^0.4.24",
-    "globals": "^16.5.0",
-    "typescript": "~5.9.3",
-    "typescript-eslint": "^8.46.4",
-    "vite": "^7.2.4"
+## 4️⃣ Frontend Dashboard
+
+React-based admin, minter, and analytics dashboard.
+
+### Run
+
+``` bash
+npm install
+npm run dev
+```
+
+------------------------------------------------------------------------
+
+## 🔄 End-to-End Flow
+
+1.  Smart contracts emit events
+2.  Subgraph indexes blockchain data
+3.  Backend stores & serves analytics
+4.  Frontend visualizes data and sends transactions
+
+------------------------------------------------------------------------
+
+## 📄 License
+
+MIT License

@@ -67,7 +67,6 @@ export const ActivityChart: React.FC = () => {
       setLoading(true);
       setError(null);
 
-      // Process data based on timeframe
       const allEvents: Array<{
         timestamp: string;
         type: "mint" | "burn" | "transfer";
@@ -120,7 +119,9 @@ export const ActivityChart: React.FC = () => {
           new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime()
       );
 
-      // Group data by hour for 24h view
+
+
+      // Group data based on timeframe
       const groupedData: { [key: string]: ChartDataPoint } = {};
 
       allEvents.forEach((event) => {
@@ -129,29 +130,44 @@ export const ActivityChart: React.FC = () => {
 
         switch (timeframe) {
           case "24h":
-            timeKey =
-              date
-                .toLocaleTimeString("en-US", {
-                  hour: "2-digit",
-                  minute: "2-digit",
-                  hour12: false,
-                })
-                .split(":")[0] + ":00";
+            // Group by hour for last 24 hours
+            timeKey = date
+              .toLocaleTimeString("en-US", {
+                hour: "2-digit",
+                hour12: false,
+                minute: "2-digit",
+              })
+              .replace(":00", ":00");
             break;
           case "7d":
-            timeKey = date.toLocaleDateString("en-US", { weekday: "short" });
+            // Group by day for last 7 days
+            timeKey = date.toLocaleDateString("en-US", {
+              month: "short",
+              day: "numeric",
+              weekday: "short",
+            });
             break;
           case "30d":
+            // Group by day for last 30 days
             timeKey = date.toLocaleDateString("en-US", {
               month: "short",
               day: "numeric",
             });
             break;
+          case "90d":
+            // Group by week for last 90 days
+            const weekStart = new Date(date);
+            weekStart.setDate(date.getDate() - date.getDay()); // Start of week (Sunday)
+            timeKey = `Week of ${weekStart.toLocaleDateString("en-US", {
+              month: "short",
+              day: "numeric",
+            })}`;
+            break;
           default:
-            timeKey = date.toLocaleTimeString("en-US", {
-              hour: "2-digit",
-              minute: "2-digit",
-              hour12: false,
+            // Default to daily grouping
+            timeKey = date.toLocaleDateString("en-US", {
+              month: "short",
+              day: "numeric",
             });
         }
 
@@ -177,13 +193,54 @@ export const ActivityChart: React.FC = () => {
         }
       });
 
-      // Convert to array and sort by time
-      const chartDataArray = Object.values(groupedData).sort((a, b) => {
+      // Convert to array
+      let chartDataArray = Object.values(groupedData);
+
+      // Sort by time based on timeframe
+      chartDataArray.sort((a, b) => {
         if (timeframe === "24h") {
-          return a.time.localeCompare(b.time);
+          // Extract hour from "HH:00" format
+          const hourA = parseInt(a.time.split(":")[0]);
+          const hourB = parseInt(b.time.split(":")[0]);
+          return hourA - hourB;
+        } else if (timeframe === "90d") {
+          // Extract date from "Week of MMM DD" format
+          const dateA = new Date(a.time.replace("Week of ", ""));
+          const dateB = new Date(b.time.replace("Week of ", ""));
+          return dateA.getTime() - dateB.getTime();
+        } else {
+          // For other formats, try to parse as date
+          const dateA = new Date(a.time);
+          const dateB = new Date(b.time);
+          return dateA.getTime() - dateB.getTime();
         }
-        return new Date(a.time).getTime() - new Date(b.time).getTime();
       });
+
+      // If we have too many points for 90d view, aggregate further
+      if (timeframe === "90d" && chartDataArray.length > 15) {
+        const aggregated: { [key: string]: ChartDataPoint } = {};
+        const weeksPerBucket = Math.ceil(chartDataArray.length / 12); // Aim for ~12 points
+
+        chartDataArray.forEach((point, index) => {
+          const bucketIndex = Math.floor(index / weeksPerBucket);
+          const bucketKey = `Week ${bucketIndex + 1}`;
+
+          if (!aggregated[bucketKey]) {
+            aggregated[bucketKey] = {
+              time: bucketKey,
+              mints: 0,
+              burns: 0,
+              transfers: 0,
+            };
+          }
+
+          aggregated[bucketKey].mints += point.mints;
+          aggregated[bucketKey].burns += point.burns;
+          aggregated[bucketKey].transfers += point.transfers;
+        });
+
+        chartDataArray = Object.values(aggregated);
+      }
 
       // Calculate stats
       const totalMints = allEvents
@@ -623,7 +680,7 @@ export const ActivityChart: React.FC = () => {
                     ))}
                   </Pie>
                   <Tooltip
-                    content={<CustomTooltip/>}
+                    content={<CustomTooltip />}
                     contentStyle={{
                       backgroundColor: "rgba(17, 24, 39, 0.95)",
                       border: "1px solid rgba(255, 255, 255, 0.1)",

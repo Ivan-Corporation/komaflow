@@ -556,7 +556,7 @@ export const EventHistory: React.FC = () => {
       )}
 
       {/* Stats Summary */}
-      <div className="mt-8 pt-6 border-t border-white/10">
+      {/* <div className="mt-8 pt-6 border-t border-white/10">
         <h3 className="text-lg font-semibold mb-4">Quick Stats</h3>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <div className="p-4 rounded-xl bg-gradient-to-br from-blue-500/10 to-blue-500/5 border border-blue-500/20">
@@ -576,7 +576,7 @@ export const EventHistory: React.FC = () => {
             <p className="text-2xl font-bold">1.01 KOMA</p>
           </div>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };
